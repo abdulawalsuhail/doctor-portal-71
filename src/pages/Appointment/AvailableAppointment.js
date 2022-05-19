@@ -1,20 +1,21 @@
-
-import { format } from 'date-fns/esm';
+import { format } from 'date-fns';
 import React, { useState, useEffect } from 'react';
 import BookingModal from './BookingModal';
-import AppointmentService from './AppointmentService';
+import AppointmentService from '../Appointment/AppointmentService';
 
-const AvailableAppointment = ({ date }) => {
-    const [services, setServices] = useState([])
-    
+const AvailableAppointments = ({ date }) => {
+    const [services, setServices] = useState([]);
     const [treatment, setTreatment] = useState(null);
-    
+    const [book, setBook] = useState(false)
 
+
+    const formattedDate = format(date, 'PP');
     useEffect(() => {
-        fetch('http://localhost:5000/service')
-        .then(res=>res.json())
-        .then(data=>setServices(data))
-    }, [])
+        fetch(`http://localhost:5000/available?date=${formattedDate}`)
+            .then(res => res.json())
+            .then(data => setServices(data));
+    }, [formattedDate,book])
+
     return (
         <div className='my-10'>
             <h4 className='text-xl text-secondary text-center my-12'>Available Appointments on {format(date, 'PP')}</h4>
@@ -28,13 +29,13 @@ const AvailableAppointment = ({ date }) => {
                 }
             </div>
             {treatment && <BookingModal
-                
                 date={date}
                 treatment={treatment}
                 setTreatment={setTreatment}
+                setBook={setBook}
             ></BookingModal>}
         </div>
     );
 };
 
-export default AvailableAppointment;
+export default AvailableAppointments;
