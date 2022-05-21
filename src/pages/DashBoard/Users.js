@@ -1,10 +1,10 @@
 import React from 'react';
 import { useQuery } from 'react-query';
 import Loading from '../Shared/Loading';
-import UseRow from '../DashBoard/UseRow';
+import UserRow from './UseRow';
 
 const Users = () => {
-    const { data: users, isLoading, refetch } = useQuery('users', () => fetch('http://localhost:5000/user', {
+    const { data: users, isLoading, refetch } = useQuery('users', () => fetch('https://doctors-portal-heroo.herokuapp.com/user', {
         method: 'GET',
         headers: {
             authorization: `Bearer ${localStorage.getItem('accessToken')}`
@@ -29,11 +29,11 @@ const Users = () => {
                     </thead>
                     <tbody>
                         {
-                            users.map(user => <UseRow
+                            users.map(user => <UserRow
                                 key={user._id}
                                 user={user}
                                 refetch={refetch}
-                            ></UseRow>)
+                            ></UserRow>)
                         }
                     </tbody>
                 </table>
